@@ -38,6 +38,9 @@ class BoardPanel(wx.Panel):
         ]
         self.Bind(wx.EVT_PAINT, self.on_paint)
         self.Bind(wx.EVT_LEFT_DOWN, self.on_left_down)
+        self.current_player = 1
+        self.player_pawns = {1: 0, 2: 0}
+        self.max_pawns = 5
 
     def on_paint(self, event):
         dc = wx.PaintDC(self)
@@ -46,9 +49,9 @@ class BoardPanel(wx.Panel):
             for case in row:
                 if case != 0:
                     if case.get__Value() == 1:
-                        dc.SetBrush(wx.Brush("black"))
-                    elif case.get__Value() == 2:
                         dc.SetBrush(wx.Brush("white"))
+                    elif case.get__Value() == 2:
+                        dc.SetBrush(wx.Brush("black"))
                     else:
                         dc.SetBrush(wx.Brush("grey"))
                     dc.DrawCircle(case.x * 40 + 20, case.y * 40 + 20, 15)
@@ -58,8 +61,15 @@ class BoardPanel(wx.Panel):
         x = pos.x // 40
         y = pos.y // 40
         if 0 <= x < 11 and 0 <= y < 19:
-            self.board[y][x].set__Value(2)
-            self.Refresh()
+            if self.player_pawns[self.current_player] < self.max_pawns:
+                if self.board[y][x].get__Value() == 1:
+                    self.board[y][x].set__Value(self.current_player+1)
+                    self.player_pawns[self.current_player] += 1
+                    self.Refresh()
+                    self.switch_player()
+
+    def switch_player(self):
+        self.current_player = 3 - self.current_player
 
 class MainFrame(wx.Frame):
     def __init__(self):
