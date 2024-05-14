@@ -4,7 +4,7 @@ class Case:
     def __init__(self, x, y, value=1):
         self.x = x
         self.y = y
-        self.value = value  # 0 for empty, 1 for one player, 2 for another player
+        self.value = value  # 1 for empty, 2 ring player 1, 3 ring player 2, 4 pawn player 1, 5 pawn player 2
 
     def set__Value(self, value):
         self.value = value
@@ -44,18 +44,28 @@ class BoardPanel(wx.Panel):
 
     def on_paint(self, event):
         dc = wx.PaintDC(self)
+        gc = wx.GraphicsContext.Create(self)
         dc.Clear()
         for row in self.board:
             for case in row:
                 if case != 0:
                     if case.get__Value() == 1:
                         dc.SetBrush(wx.Brush("white"))
+                        dc.DrawCircle(case.x * 40 + 20, case.y * 40 + 20, 15)
                     elif case.get__Value() == 2:
+                        pen = gc.CreatePen(wx.Pen(wx.BLACK, width=3))
+                        gc.SetPen(pen)
+                        gc.DrawEllipse(case.x * 40 + 5, case.y * 40 + 5, 30, 30)
+                    elif case.get__Value() == 3:
+                        pen = gc.CreatePen(wx.Pen(wx.Colour(128, 128, 128), width=3))
+                        gc.SetPen(pen)
+                        gc.DrawEllipse(case.x * 40 + 5, case.y * 40 + 5, 30, 30)
+                    elif case.get__Value() == 4:
                         dc.SetBrush(wx.Brush("black"))
-                    else:
+                        dc.DrawCircle(case.x * 40 + 20, case.y * 40 + 20, 10)
+                    elif case.get__Value() == 5:
                         dc.SetBrush(wx.Brush("grey"))
-                    dc.DrawCircle(case.x * 40 + 20, case.y * 40 + 20, 15)
-
+                        dc.DrawCircle(case.x * 40 + 20, case.y * 40 + 20, 10)
     def on_left_down(self, event):
         pos = event.GetPosition()
         x = pos.x // 40
@@ -74,6 +84,7 @@ class BoardPanel(wx.Panel):
 class MainFrame(wx.Frame):
     def __init__(self):
         super().__init__(None, title="YINSH Board", size=(500, 800))
+        self.Centre()
         panel = BoardPanel(self)
 
 if __name__ == '__main__':
