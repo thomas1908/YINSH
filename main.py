@@ -21,6 +21,7 @@ class Case:
 class BoardPanel(wx.Panel):
     def __init__(self, parent):
         super().__init__(parent)
+        self.SetBackgroundColour('blue')
         self.board = [
             [0, 0, 0, 0, Case(4, 0), 0, Case(6, 0), 0, 0, 0, 0],
             [0, 0, 0, Case(3, 1), 0, Case(5, 1), 0, Case(7, 1), 0, 0, 0],
@@ -57,36 +58,52 @@ class BoardPanel(wx.Panel):
             for case in row:
                 if case != 0:
                     if case.get__Value() == 1:
-                        dc.SetBrush(wx.Brush("white"))
-                        dc.DrawCircle(case.x * 40 + 20, case.y * 40 + 20, 15)
+                        pen = gc.CreatePen(wx.Pen(wx.WHITE, width=3))
+                        gc.SetPen(pen)
+                        gc.DrawEllipse(case.x * 40 + 5, case.y * 40 + 5, 30, 30)
                     elif case.get__Value() == 2:
-                        pen = gc.CreatePen(wx.Pen(wx.BLACK, width=3))
+                        pen = gc.CreatePen(wx.Pen(wx.BLACK, width=5))
                         gc.SetPen(pen)
                         gc.DrawEllipse(case.x * 40 + 5, case.y * 40 + 5, 30, 30)
                     elif case.get__Value() == 3:
-                        pen = gc.CreatePen(wx.Pen(wx.Colour(128, 128, 128), width=3))
+                        pen = gc.CreatePen(wx.Pen(wx.Colour(128, 128, 128), width=5))
                         gc.SetPen(pen)
                         gc.DrawEllipse(case.x * 40 + 5, case.y * 40 + 5, 30, 30)
                     elif case.get__ring() == True and case.get__Value() == 4:
                         dc.SetBrush(wx.Brush("black"))
+                        dc.SetPen(wx.Pen("black"))  # Set the pen color to grey
                         dc.DrawCircle(case.x * 40 + 20, case.y * 40 + 20, 25)
-                        pen = gc.CreatePen(wx.Pen(wx.WHITE, width=3))
-                        gc.SetPen(pen)
-                        gc.DrawEllipse(case.x * 40 + 5, case.y * 40 + 5, 30, 30)
+
+                        # Draw a smaller circle in the same color as the background (to create the ring effect)
+                        dc.SetBrush(wx.Brush("blue"))  # Assuming the background is white
+                        dc.SetPen(wx.Pen("blue"))  # Set the pen color to white
+                        dc.DrawCircle(case.x * 40 + 20, case.y * 40 + 20, 20)
+
+                        # Draw the inner circle
+                        dc.SetBrush(wx.Brush("black"))
+                        dc.SetPen(wx.Pen("black"))  # Set the pen color to grey
+                        dc.DrawCircle(case.x * 40 + 20, case.y * 40 + 20, 15)
                     elif case.get__ring() == True and case.get__Value() == 5:
                         dc.SetBrush(wx.Brush("grey"))
+                        dc.SetPen(wx.Pen("grey"))  # Set the pen color to grey
                         dc.DrawCircle(case.x * 40 + 20, case.y * 40 + 20, 25)
-                        pen = gc.CreatePen(wx.Pen(wx.Colour(255, 255, 255), width=3))
-                        gc.SetPen(pen)
-                        gc.DrawEllipse(case.x * 40 + 5, case.y * 40 + 5, 30, 30)
+
+                        # Draw a smaller circle in the same color as the background (to create the ring effect)
+                        dc.SetBrush(wx.Brush("blue"))  # Assuming the background is white
+                        dc.SetPen(wx.Pen("blue"))  # Set the pen color to white
+                        dc.DrawCircle(case.x * 40 + 20, case.y * 40 + 20, 20)
+
+                        # Draw the inner circle
+                        dc.SetBrush(wx.Brush("grey"))
+                        dc.SetPen(wx.Pen("grey"))  # Set the pen color to grey
+                        dc.DrawCircle(case.x * 40 + 20, case.y * 40 + 20, 15)
                     elif case.get__Value() == 4 and case.get__ring() == False:
-                        pen = gc.CreatePen(wx.Pen(wx.BLACK, width=3))
-                        gc.SetPen(pen)
-                        gc.DrawEllipse(case.x * 40 + 5, case.y * 40 + 5, 30, 30)
                         dc.SetBrush(wx.Brush("black"))
+                        dc.SetPen(wx.Pen("black"))  # Set the pen color to grey
                         dc.DrawCircle(case.x * 40 + 20, case.y * 40 + 20, 15)
                     elif case.get__Value() == 5 and case.get__ring() == False:
                         dc.SetBrush(wx.Brush("grey"))
+                        dc.SetPen(wx.Pen("grey"))  # Set the pen color to grey
                         dc.DrawCircle(case.x * 40 + 20, case.y * 40 + 20, 15)
 
     def on_left_down(self, event):
